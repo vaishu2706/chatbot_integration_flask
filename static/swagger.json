@@ -1,0 +1,149 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "User API",
+    "description": "API documentation for user management",
+    "version": "1.0.0"
+  },
+  "host": "127.0.0.1:5000",
+  "schemes": ["http"],
+  "paths": {
+    "/login": {
+      "post": {
+        "summary": "Login",
+        "description": "User login endpoint",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "username": { "type": "string" },
+                "password": { "type": "string" }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": { "description": "Login successful" },
+          "401": { "description": "Invalid credentials" }
+        }
+      }
+    },
+    "/users": {
+      "get": {
+        "summary": "Get Users",
+        "description": "Retrieve all users or a specific user if user_id is provided as an optional query parameter",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "query",
+            "description": "Optional user ID to fetch a specific user",
+            "required": false,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User(s) retrieved successfully",
+            "schema": {
+              "oneOf": [
+                {
+                  "type": "object",
+                  "properties": {
+                    "id": { "type": "integer" },
+                    "username": { "type": "string" },
+                    "password": { "type": "string" }
+                  }
+                },
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": { "type": "integer" },
+                      "username": { "type": "string" },
+                      "password": { "type": "string" }
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "400": { "description": "Invalid user_id parameter" },
+          "404": { "description": "User not found" }
+        }
+      },
+      "post": {
+        "summary": "Create User",
+        "description": "Add a new user",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "username": { "type": "string" },
+                "password": { "type": "string" }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": { "description": "User added successfully" },
+          "400": { "description": "Invalid input or username exists" }
+        }
+      }
+    },
+    "/users/{user_id}": {
+      "put": {
+        "summary": "Update User",
+        "description": "Update user details",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "username": { "type": "string" },
+                "password": { "type": "string" }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": { "description": "User updated successfully" },
+          "404": { "description": "User not found" }
+        }
+      },
+      "delete": {
+        "summary": "Delete User",
+        "description": "Delete a user by ID",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": { "description": "User deleted successfully" },
+          "404": { "description": "User not found" }
+        }
+      }
+    }
+  }
+}
